@@ -2,102 +2,42 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>currentDocument</key>
-	<string>foo.coffee</string>
 	<key>documents</key>
 	<array>
 		<dict>
 			<key>filename</key>
-			<string>simple.json</string>
+			<string>Cakefile</string>
 			<key>lastUsed</key>
-			<date>2011-02-25T13:19:10Z</date>
+			<date>2011-02-26T16:07:59Z</date>
 		</dict>
 		<dict>
-			<key>filename</key>
-			<string>data.json</string>
-			<key>lastUsed</key>
-			<date>2011-02-25T14:14:14Z</date>
-		</dict>
-		<dict>
-			<key>filename</key>
-			<string>algo.coffee</string>
-			<key>lastUsed</key>
-			<date>2011-02-25T14:14:13Z</date>
-		</dict>
-		<dict>
-			<key>filename</key>
-			<string>express.coffee</string>
-			<key>lastUsed</key>
-			<date>2011-02-25T13:35:54Z</date>
-		</dict>
-		<dict>
-			<key>filename</key>
-			<string>bar.coffee</string>
-			<key>lastUsed</key>
-			<date>2011-02-25T14:26:58Z</date>
-		</dict>
-		<dict>
-			<key>filename</key>
-			<string>foo.coffee</string>
-			<key>lastUsed</key>
-			<date>2011-02-25T14:26:58Z</date>
-			<key>selected</key>
+			<key>expanded</key>
 			<true/>
+			<key>name</key>
+			<string>spec</string>
+			<key>regexFolderFilter</key>
+			<string>!.*/(\.[^/]*|CVS|_darcs|_MTN|\{arch\}|blib|.*~\.nib|.*\.(framework|app|pbproj|pbxproj|xcode(proj)?|bundle))$</string>
+			<key>sourceDirectory</key>
+			<string>spec</string>
 		</dict>
 		<dict>
-			<key>filename</key>
-			<string>server.coffee</string>
-			<key>lastUsed</key>
-			<date>2011-02-25T14:14:13Z</date>
-		</dict>
-		<dict>
-			<key>filename</key>
-			<string>algo-spec.coffee</string>
-			<key>lastUsed</key>
-			<date>2011-02-25T14:14:14Z</date>
+			<key>expanded</key>
+			<true/>
+			<key>name</key>
+			<string>src</string>
+			<key>regexFolderFilter</key>
+			<string>!.*/(\.[^/]*|CVS|_darcs|_MTN|\{arch\}|blib|.*~\.nib|.*\.(framework|app|pbproj|pbxproj|xcode(proj)?|bundle))$</string>
+			<key>sourceDirectory</key>
+			<string>src</string>
 		</dict>
 	</array>
 	<key>fileHierarchyDrawerWidth</key>
 	<integer>200</integer>
 	<key>metaData</key>
-	<dict>
-		<key>bar.coffee</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>16</integer>
-				<key>line</key>
-				<integer>3</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>0</integer>
-		</dict>
-		<key>foo.coffee</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>2</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>0</integer>
-		</dict>
-	</dict>
-	<key>openDocuments</key>
-	<array>
-		<string>foo.coffee</string>
-		<string>bar.coffee</string>
-	</array>
+	<dict/>
 	<key>showFileHierarchyDrawer</key>
 	<true/>
 	<key>windowFrame</key>
-	<string>{{636, 84}, {773, 744}}</string>
+	<string>{{1011, 434}, {773, 744}}</string>
 </dict>
 </plist>

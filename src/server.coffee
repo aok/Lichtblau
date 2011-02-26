@@ -5,6 +5,7 @@ algo = require "./algo"
 process = algo.homework
 
 doget = (req,res) ->
+	console.log 'GET'
 	res.writeHead 400, {"Content-Type": "text/plain"}
 	res.write "Post me some JSON\n"
 	res.end()

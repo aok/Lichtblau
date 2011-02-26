@@ -1,7 +1,7 @@
 vows = require 'vows'
 assert = require 'assert'
 
-algo = require './algo'
+algo = require '../src/algo'
 
 vows.describe('Algo').addBatch(
 	'Homework':
