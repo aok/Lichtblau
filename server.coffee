@@ -1,26 +1,34 @@
 sys = require "sys"
 http = require "http"
+algo = require "./algo"
 
-collect = (req) ->
-	req.content = ''
-	req.on("data", (chunk) ->
-		req.content += chunk)
+process = algo.homework
 
-process = (data) ->
-	obj = JSON.parse data
-	JSON.stringify [obj?.c[0]?.id,3]
-
-respond = (res) ->
-	res.writeHead 200, {"Content-Type": "text/plain"}
-	res.write res.content+"\n"
+doget = (req,res) ->
+	res.writeHead 400, {"Content-Type": "text/plain"}
+	res.write "Post me some JSON\n"
 	res.end()
 
-http.createServer((req, res) ->
-	collect req
+dopost = (req,res) ->
+	req.content = ""
+
+	req.on("data", (chunk) ->
+		req.content += chunk
+	)
+#
 	req.on("end", ->
-		res.content = process req.content	
-		respond res)
+		result = JSON.stringify process JSON.parse req.content
+		res.writeHead 200, {"Content-Type": "application/json"}
+		res.write result+'\n'
+		res.end()
+	)
+
+http.createServer((req, res) ->
+	console.log JSON.stringify req.headers
+	if req.method is 'POST'
+		dopost(req,res)
+	else
+		doget(req,res)
 ).listen 8000
 
 console.log "Server running at http://127.0.0.1:8000/"
-	
