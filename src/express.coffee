@@ -1,18 +1,19 @@
 express = require 'express'
+algo = require "./algo"
 
-app = express.createServer()
-app.use express.bodyDecoder('application/json')
+process = algo.homework
+
+app = express.createServer(
+	express.logger()
+	express.bodyDecoder('application/json')
+)
 
 app.get('/', (req, res) ->
-	res.send 'POST me some JSON'
+	res.send 'POST me some JSON\n'
 )
 
 app.post('/', (req, res) -> 
-	#obj = JSON.parse req.body
-	#res.send JSON.stringify [obj?.c[0]?.id,3]
-	out = JSON.stringify(req.headers)+'\n\n'
-	out += JSON.stringify(req.body)+'\n'
-	res.send out
+	res.send JSON.stringify(process req.body)+'\n'
 )
 
 app.listen(8000);
