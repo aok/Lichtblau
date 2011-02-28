@@ -28,7 +28,7 @@ task "watch", "Compile coffeescript on change", ->
 	bkgrnd("coffee", ["-cw", "-o", "build", "src"])
 
 task "server", "Run server and reload when sources change", ->
-	bkgrnd("node-dev", ["build/express.js"])
+	bkgrnd("node-dev", ["build/server.js"])
 
 runTests = (callback)->
 	log "Running test suite ...", green
