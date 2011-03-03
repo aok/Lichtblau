@@ -10,8 +10,8 @@ green   = "\033[0;32m"
 reset   = "\033[0m"
 
 # Log a message with a color.
-log = (message, color, explanation) ->
-    console.log color + message + reset + ' ' + (explanation or '')
+log = (message, color='', explanation='') ->
+    console.log color + message + reset + ' ' + explanation
 
 # Handle error and kill the process.
 onerror = (err) ->
@@ -66,3 +66,17 @@ postfile = (datafile='spec/data.json') ->
 
 task "post", "post example json to server", ->
     postfile()
+
+#option '-f', '--inputfile [FILE]', 'file to read from'
+#
+#prettyprint = (inputfile='spec/round-config.json') ->
+#	pretty = ''
+#	fs.readFile(inputfile, (err, contents) ->
+#		JSON.stringify contents
+#	)
+#
+#task "prettyprint", "read json and pretty-print it back", (options) ->
+#	prettyprint options.inputfile
+
+
+

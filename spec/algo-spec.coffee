@@ -1,7 +1,10 @@
 vows = require 'vows'
+_ = require 'underscore'
 assert = require 'assert'
 
 algo = require '../src/algo'
+
+whattotest = algo.stooped
 
 exampledata = {
     "name":"lol",
@@ -14,6 +17,7 @@ exampledata = {
     "capacity":[99,10,1000]
 }
 
+
 vows.describe('Algo').addBatch(
     'Homework':
         topic: algo.homework exampledata
@@ -25,13 +29,20 @@ vows.describe('Algo').addBatch(
             assert.equal(topic[1], 3)
         'Returns [1,3]': (topic) ->
             assert.deepEqual(topic, [1,3])
-
-#   'Homework':
-#        topic: algo.takeUntilFull examplewnames
-#        'Returns an array of integers': (topic) ->
-#            assert.equal(topic.length, 2)
-#
-
+    'Knapsack rules':
+        topic: whattotest exampledata
+        'Returns an array': (t) ->
+            assert.isArray(t)
+        'Weight of 1st dimension within limit': (t) ->
+            weights = (exampledata.contents[itemId-1].weight[0] for itemId in t)
+            sum = _.reduce(weights, ((memo, num) -> memo + num), 0)
+            assert.ok(sum<=exampledata.capacity[0], sum+'>'+exampledata.capacity[0])
+        'Weight of 2nd dimension within limit': (t) ->
+            weights = (exampledata.contents[itemId-1].weight[1] for itemId in t)
+            sum = _.reduce(weights, ((memo, num) -> memo + num), 0)
+            assert.ok(sum<=exampledata.capacity[1], sum+'>'+exampledata.capacity[1])
+        'Weight of 3rd dimension within limit': (t) ->
+            weights = (exampledata.contents[itemId-1].weight[2] for itemId in t)
+            sum = _.reduce(weights, ((memo, num) -> memo + num), 0)
+            assert.ok(sum<=exampledata.capacity[2], sum+'>'+exampledata.capacity[2])
 ).export(module)
-
-
