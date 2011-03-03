@@ -13,6 +13,6 @@ It is built with CoffeeScript, Node.js, Express and Vows.
 ## Running
 
     cake watch
-	cake server
+    cake server
     cake test
-	cake post
+    cake post
