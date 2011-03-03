@@ -25,7 +25,7 @@ bkgrnd = (cmd, args) ->
     cmd.on "error", onerror
 
 task "watch", "Compile coffeescript on change", ->
-    bkgrnd("coffee", ["-cw", "-o", "build", "src"])
+    bkgrnd("coffee", ["-cw", "-o", "build", "src", "spec"])
 
 task "server", "Run server and reload when sources change", ->
     bkgrnd("node-dev", ["build/server.js"])
