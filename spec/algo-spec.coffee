@@ -59,14 +59,14 @@ vows.describe('Algo').addBatch(
         topic: whattotest exampleOfOneFitting
         'Returns an array': (t) ->
             assert.isArray(t)
-        'returns [1]': (t) ->
-            assert.deepEqual(t,['1'])
+        'Returns [1]': (t) ->
+            assert.deepEqual(t, ['1'])
     'Knapsack rules, when two fit':
         topic: whattotest exampleOfTwoFitting
         'Returns an array': (t) ->
             assert.isArray(t)
-        'Result contains either 1 or 2': (t) ->
-            assert.isTrue(_.include(t,'1') or _.include(t,'2'))
+        'Returns [1, 2]': (t) ->
+            assert.deepEqual(t, ['1', '2'])
     'Fitting in one dimension':
         'when within capacity':
             topic: algo.fits([1],[2])
