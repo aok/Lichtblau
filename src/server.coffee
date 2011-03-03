@@ -1,9 +1,18 @@
 express = require 'express'
 algo = require "./algo"
 
-process = algo.homework
+process = algo.firstThatFits
 
 logformat = {format: '>\t:method :url \t\":req[content-type]\" \n<\t:status \t\":req[content-type]\" \t:response-timems'}
+
+logParameters = (obj) ->
+    params = {
+        timeout: obj.timeout
+        contents: obj.contents.length+' items'
+        capacity: obj.capacity
+    }
+    console.log JSON.stringify params
+
 
 app = express.createServer(
     express.logger(logformat),
@@ -16,7 +25,8 @@ app.get('/', (req, res) ->
 )
 
 app.post('/', (req, res) ->
-    res.contentType('application/json; charset=utf8')
+    logParameters req.body
+    res.contentType('application/json; charset=utf8')    
     res.send JSON.stringify(process req.body)
 )
 

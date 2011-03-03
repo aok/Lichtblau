@@ -23,6 +23,10 @@ exports.firstThatFits = (obj) ->
     itemFits = (item) ->
         exports.fits item.weight,capacity
 
-    allThatWouldFit = _.select(items, itemFits) 
-    fitting = _.first allThatWouldFit
-    _.toArray(fitting?.id)
+    allThatWouldFit = _.select(items, itemFits)
+    selectedItem = _.first allThatWouldFit
+    id = selectedItem?.id
+    if id
+        return [id]
+    else
+        return []

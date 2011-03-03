@@ -60,26 +60,13 @@ vows.describe('Algo').addBatch(
         'Returns an array': (t) ->
             assert.isArray(t)
         'returns [1]': (t) ->
-            assert.deepEqual(t,[1])
-    'Generic knapsack rules':
+            assert.deepEqual(t,['1'])
+    'Knapsack rules, when two fit':
         topic: whattotest exampleOfTwoFitting
         'Returns an array': (t) ->
             assert.isArray(t)
-        'Weight of 1st dimension within limit': (t) ->
-            d = exampleOfTwoFitting
-            weights = (d.contents[itemId-1].weight[0] for itemId in t)
-            sum = _.reduce(weights, ((memo, num) -> memo + num), 0)
-            assert.ok(sum<=d.capacity[0], sum+'>'+d.capacity[0])
-        'Weight of 2nd dimension within limit': (t) ->
-            d = exampleOfTwoFitting
-            weights = (d.contents[itemId-1].weight[1] for itemId in t)
-            sum = _.reduce(weights, ((memo, num) -> memo + num), 0)
-            assert.ok(sum<=d.capacity[1], sum+'>'+d.capacity[1])
-        'Weight of 3rd dimension within limit': (t) ->
-            d = exampleOfTwoFitting
-            weights = (d.contents[itemId-1].weight[2] for itemId in t)
-            sum = _.reduce(weights, ((memo, num) -> memo + num), 0)
-            assert.ok(sum<=d.capacity[2], sum+'>'+d.capacity[2])
+        'Result contains either 1 or 2': (t) ->
+            assert.isTrue(_.include(t,'1') or _.include(t,'2'))
     'Fitting in one dimension':
         'when within capacity':
             topic: algo.fits([1],[2])
