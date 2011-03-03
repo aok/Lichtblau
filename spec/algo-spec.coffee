@@ -4,9 +4,9 @@ assert = require 'assert'
 
 algo = require '../src/algo'
 
-whattotest = algo.stooped
+whattotest = algo.firstThatFits
 
-exampledata = {
+exampleOfNothingFitting = {
     "name":"lol",
     "timeout":6000,
     "contents":[
@@ -16,11 +16,31 @@ exampledata = {
     ],
     "capacity":[99,10,1000]
 }
+exampleOfOneFitting = {
+    "name":"lol",
+    "timeout":6000,
+    "contents":[
+        {"id":"1","weight":[10,20,30],"value":40},
+        {"id":"2","weight":[40,50,60],"value":100},
+        {"id":"3","weight":[30,60,90],"value":200}
+    ],
+    "capacity":[99,30,1000]
+}
+exampleOfTwoFitting = {
+    "name":"lol",
+    "timeout":6000,
+    "contents":[
+        {"id":"1","weight":[10,20,30],"value":40},
+        {"id":"2","weight":[40,50,60],"value":100},
+        {"id":"3","weight":[30,60,90],"value":200}
+    ],
+    "capacity":[99,70,1000]
+}
 
 
 vows.describe('Algo').addBatch(
     'Homework':
-        topic: algo.homework exampledata
+        topic: algo.homework exampleOfNothingFitting
         'Returns an array of length 2': (topic) ->
             assert.equal(topic.length, 2)
         'Returns an array with first element 1': (topic) ->
@@ -29,22 +49,37 @@ vows.describe('Algo').addBatch(
             assert.equal(topic[1], 3)
         'Returns [1,3]': (topic) ->
             assert.deepEqual(topic, [1,3])
-    'Knapsack rules':
-        topic: whattotest exampledata
+    'Knapsack rules, when nothing fits':
+        topic: whattotest exampleOfNothingFitting
+        'Returns an array': (t) ->
+            assert.isArray(t)
+        'Array is empty': (t) ->
+            assert.isEmpty(t)
+    'Knapsack rules, when one fits':
+        topic: whattotest exampleOfOneFitting
+        'Returns an array': (t) ->
+            assert.isArray(t)
+        'returns [1]': (t) ->
+            assert.deepEqual(t,[1])
+    'Generic knapsack rules':
+        topic: whattotest exampleOfTwoFitting
         'Returns an array': (t) ->
             assert.isArray(t)
         'Weight of 1st dimension within limit': (t) ->
-            weights = (exampledata.contents[itemId-1].weight[0] for itemId in t)
+            d = exampleOfTwoFitting
+            weights = (d.contents[itemId-1].weight[0] for itemId in t)
             sum = _.reduce(weights, ((memo, num) -> memo + num), 0)
-            assert.ok(sum<=exampledata.capacity[0], sum+'>'+exampledata.capacity[0])
+            assert.ok(sum<=d.capacity[0], sum+'>'+d.capacity[0])
         'Weight of 2nd dimension within limit': (t) ->
-            weights = (exampledata.contents[itemId-1].weight[1] for itemId in t)
+            d = exampleOfTwoFitting
+            weights = (d.contents[itemId-1].weight[1] for itemId in t)
             sum = _.reduce(weights, ((memo, num) -> memo + num), 0)
-            assert.ok(sum<=exampledata.capacity[1], sum+'>'+exampledata.capacity[1])
+            assert.ok(sum<=d.capacity[1], sum+'>'+d.capacity[1])
         'Weight of 3rd dimension within limit': (t) ->
-            weights = (exampledata.contents[itemId-1].weight[2] for itemId in t)
+            d = exampleOfTwoFitting
+            weights = (d.contents[itemId-1].weight[2] for itemId in t)
             sum = _.reduce(weights, ((memo, num) -> memo + num), 0)
-            assert.ok(sum<=exampledata.capacity[2], sum+'>'+exampledata.capacity[2])
+            assert.ok(sum<=d.capacity[2], sum+'>'+d.capacity[2])
     'Fitting in one dimension':
         'when within capacity':
             topic: algo.fits([1],[2])

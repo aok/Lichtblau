@@ -1,11 +1,5 @@
 _ = require 'underscore'
 
-exports.homework = (obj) ->
-    [obj?.contents[0]?.id,3]
-
-exports.stooped = (obj) ->
-    []
-
 exports.fits = (dimensions, capacity) ->
     stillFits = true
     compare = (t) ->
@@ -15,3 +9,20 @@ exports.fits = (dimensions, capacity) ->
     compare pair for pair in tuples
     
     stillFits
+
+exports.homework = (obj) ->
+    [obj?.contents[0]?.id,3]
+
+exports.stooped = (obj) ->
+    []
+    
+exports.firstThatFits = (obj) ->
+    capacity = obj.capacity
+    items = obj.contents
+    
+    itemFits = (item) ->
+        exports.fits item.weight,capacity
+
+    allThatWouldFit = _.select(items, itemFits) 
+    fitting = _.first allThatWouldFit
+    _.toArray(fitting?.id)
