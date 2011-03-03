@@ -12,5 +12,7 @@ It is built with CoffeeScript, Node.js, Express and Vows.
 
 ## Running
 
-    cake server
+    cake watch
+	cake server
     cake test
+	cake post
