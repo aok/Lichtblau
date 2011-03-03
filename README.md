@@ -8,7 +8,7 @@ It is built with CoffeeScript, Node.js, Express and Vows.
 
     brew install node
     curl http://npmjs.org/install.sh | sh
-    npm install coffee-script express vows
+    npm install node-dev coffee-script express vows
 
 ## Running
 
