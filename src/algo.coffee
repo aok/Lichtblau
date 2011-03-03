@@ -4,9 +4,14 @@ exports.homework = (obj) ->
     [obj?.contents[0]?.id,3]
 
 exports.stooped = (obj) ->
-    [1,2,3]
+    []
 
 exports.fits = (dimensions, capacity) ->
+    stillFits = true
+    compare = (t) ->
+        stillFits = t[0] <= t[1] and stillFits
+
     tuples = _.zip(dimensions, capacity)
-    console.log pair for pair in tuples
-    false
+    compare pair for pair in tuples
+    
+    stillFits
