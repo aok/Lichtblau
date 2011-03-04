@@ -50,7 +50,7 @@ vows.describe('Lichtblau').addBatch(
             assert.isArray(t)
         'Return some results': (t) ->
             console.log t
-            assert.notEqual(0,t.length)            
+            assert.notEqual(0,t.length)
 ).addBatch(
     'Fitting in one dimension':
         'when within capacity':
