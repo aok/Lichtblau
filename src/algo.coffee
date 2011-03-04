@@ -18,12 +18,6 @@ class Sack
         else
             false
 
-exports.homework = (problem) ->
-    [problem?.contents[0]?.id,3]
-
-stooped = (problem) ->
-    []
-
 packFromPrioritisedList = (items, capacity) ->
     sack = new Sack capacity
     _.each(items, (item) -> sack.pack item)
@@ -38,17 +32,8 @@ sortWithAndPack = (problem, f) ->
     sack = packFromPrioritisedList items, problem.capacity
     sack
 
-packInOrderOfCubicValuePerCubicWeight = (problem) ->
-    sortWithAndPack problem,cubicValuePerCubicWeight
-
 packInOrderOfValuePerSumWeight = (problem) ->
     sortWithAndPack problem,valuePerSumWeight
-
-cubicValuePerCubicWeight = (item) ->
-    item.bang = Math.pow(item.value,item.weight.length)
-    dilute = (wx) ->
-        item.bang = item.bang / wx
-    dilute w for w in item.weight
     
 valuePerSumWeight = (item) ->
     item.bang = item.value / _.reduce(item.weight, ((memo, num) -> memo + num), 0)
@@ -67,18 +52,9 @@ randomTriesFromBestFraction = (problem, fraction=2, tries=100) ->
     
     _.max(sacks, (sack) -> sack.value)
 
-sortDiscardAndSortAgain = (problem) ->
-    items = sortWith problem.contents, valuePerSumWeight
-    items = items[0...items.length/2]
-    
-    sortWithAndPack problem, cubicValuePerCubicWeight
-
-
 tryManyAndChooseBest = (problem) ->
     solutions = [
-#        packInOrderOfCubicValuePerCubicWeight(problem),
         packInOrderOfValuePerSumWeight(problem),
-        sortDiscardAndSortAgain(problem),
         randomTriesFromBestFraction(problem)
     ]
 
