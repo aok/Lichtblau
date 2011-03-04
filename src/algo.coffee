@@ -50,12 +50,6 @@ randomTriesFromBestFractionUntilTimeout = (problem, fraction=2, timeout=1000) ->
 randomSack = (items, capacity) ->
     packFromPrioritisedList _.sortBy(items, Math.random), capacity
 
-
-randomUntilTimeout = (problem, timeout=500) ->
-    generator = () ->
-        randomSack problem.contents, problem.capacity
-    improveUntilTimeout generator(), generator, timeout
-
 improveUntilTimeout = (start, generator, timeout=1000) ->
     
     sack = start
@@ -71,9 +65,11 @@ improveUntilTimeout = (start, generator, timeout=1000) ->
     sack
 
 tryManyAndChooseBest = (problem) ->
+    #to = _.min(5000,problem.timeout-3000)
+    to = problem.timeout-3000
     solutions = [
         packInOrderOfValuePerSumWeight(problem),
-        randomTriesFromBestFractionUntilTimeout(problem)
+        randomTriesFromBestFractionUntilTimeout(problem,2,to)
     ]
 
     values = _.pluck(solutions, "value")

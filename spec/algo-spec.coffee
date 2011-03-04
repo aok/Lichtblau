@@ -27,12 +27,12 @@ loops = (max, timeout) ->
     i
 
 vows.describe('Lichtblau').addBatch(
-    'Timeout testing':
-        'when max 1000 and timeout is 10ms':
+    'Clock-based timeout with inrement loop':
+        'returns upper limit when limit is low and timeout long':
             topic: loops(1000,10)
             'Returns 1000': (t) ->
                 assert.equal(t,1000)
-        'when max 99999999999 and timeout is 3s':
+        'returns under limit when limit is hihg and timeout short':
             topic: loops(99999999999,3000)
             'Returns less than max ': (t) ->
                 assert.isTrue(t<99999999999) 
