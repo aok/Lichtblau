@@ -1,3 +1,6 @@
+fs = require 'fs'
+
+
 exports.e0 = {
         "name":"lol",
         "timeout":6000,
@@ -28,3 +31,10 @@ exports.e2 = {
     ],
     "capacity":[99,70,1000]
 }
+exports.round0 = () ->
+    data = ''
+    fs.readFile 'spec/round0-data.json', (err, contents) ->
+        throw err if err
+        console.log contents.length
+        data = JSON.parse contents
+    data
