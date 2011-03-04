@@ -1,6 +1,3 @@
-exports.foo = () ->
-    console.log 'foo'
-
 exports.e0 = {
         "name":"lol",
         "timeout":6000,

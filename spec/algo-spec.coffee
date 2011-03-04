@@ -4,9 +4,6 @@ assert = require 'assert'
 
 algo = require '../src/algo'
 testproblems = require './testproblems'
-testproblems.foo()
-
-
 
 whattotest = algo.firstThatFits
 
