@@ -32,9 +32,17 @@ exports.e2 = {
     "capacity":[99,70,1000]
 }
 exports.round0 = () ->
+    readRound(0)
+
+exports.round1 = () ->
+    readRound(1)
+
+
+readRound = (round) ->
     data = ''
-    fs.readFile 'spec/round0-data.json', (err, contents) ->
+    fs.readFile 'spec/round'+round+'-data.json', (err, contents) ->
         throw err if err
         console.log contents.length
         data = JSON.parse contents
     data
+    

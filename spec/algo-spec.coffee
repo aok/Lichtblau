@@ -44,7 +44,13 @@ vows.describe('Lichtblau').addBatch(
         'Return some results': (t) ->
             console.log t
             assert.notEqual(0,t.length)
-            
+    'Knapsack rules, for round1':
+        topic: whattotest testproblems.round0()
+        'Returns an array': (t) ->
+            assert.isArray(t)
+        'Return some results': (t) ->
+            console.log t
+            assert.notEqual(0,t.length)            
 ).addBatch(
     'Fitting in one dimension':
         'when within capacity':
