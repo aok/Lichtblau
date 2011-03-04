@@ -38,43 +38,26 @@ sortWithAndPack = (problem, f) ->
     sack = packFromPrioritisedList items, problem.capacity
     sack
 
-packInOrderOfValuePerCubicWeight = (problem) ->
-    sortWithAndPack problem,valuePerCubicWeight
-
 packInOrderOfCubicValuePerCubicWeight = (problem) ->
     sortWithAndPack problem,cubicValuePerCubicWeight
 
-packInOrderOfValue = (problem) ->
-    sortWithAndPack problem, (item) -> item.bang = item.value
+packInOrderOfValuePerSumWeight = (problem) ->
+    sortWithAndPack problem,valuePerSumWeight
 
-packInOrderOfValuePerFirstWeightDimension = (problem) ->
-    sortWithAndPack problem, (item) -> item.bang = item.value / item.weight[0]
-
-packInOrderOfValuePerSecondWeightDimension = (problem) ->
-    sortWithAndPack problem, (item) -> item.bang = item.value / item.weight[1]
-
-packInOrderOfValuePerThirdWeightDimension = (problem) ->
-    sortWithAndPack problem, (item) -> item.bang = item.value / item.weight[2]
-
-nDilute = (item) ->
+cubicValuePerCubicWeight = (item) ->
+    item.bang = Math.pow(item.value,item.weight.length)
     dilute = (wx) ->
         item.bang = item.bang / wx
     dilute w for w in item.weight
     
+valuePerSumWeight = (item) ->
+    item.bang = item.value / _.reduce(item.weight, ((memo, num) -> memo + num), 0)
 
-valuePerCubicWeight = (item) ->
-    item.bang = item.value
-    nDilute item
-
-cubicValuePerCubicWeight = (item) ->
-    item.bang = Math.pow(item.value,item.weight.length)
-    nDilute item
-
-randomTriesFromBestThird = (problem) ->
-    items = sortWith problem.contents, cubicValuePerCubicWeight
-    items = items[0...items.length/3]
+randomTriesFromBestFraction = (problem, fraction=2, tries=20) ->
+    items = sortWith problem.contents, valuePerSumWeight
+    items = items[0...items.length/fraction]
     
-    tries = [0..10]
+    tries = [0..tries]
     sacks = []
     
     newRandomSack = (i) ->
@@ -85,18 +68,22 @@ randomTriesFromBestThird = (problem) ->
     
     _.max(sacks, (sack) -> sack.value)
 
+sortDiscardAndSortAgain = (problem) ->
+    items = sortWith problem.contents, cubicValuePerCubicWeight
+    items = items[0...items.length/3]
+    
+    sortWithAndPack problem, (item) -> item.bang = item.value / item.weight[0]
+
+
+
 tryManyAndChooseBest = (problem) ->
     solutions = [
-        packInOrderOfValue(problem),
-        packInOrderOfValuePerFirstWeightDimension(problem)
-        packInOrderOfValuePerCubicWeight(problem),
-        packInOrderOfCubicValuePerCubicWeight(problem),
-        randomTriesFromBestThird(problem)
+#        packInOrderOfCubicValuePerCubicWeight(problem),
+        packInOrderOfValuePerSumWeight(problem),
+        sortDiscardAndSortAgain(problem),
+        randomTriesFromBestFraction(problem)
     ]
-    if problem.capacity.length >= 2
-        solutions.push(packInOrderOfValuePerSecondWeightDimension(problem))
-    if problem.capacity.length >= 3
-        solutions.push(packInOrderOfValuePerThirdWeightDimension(problem))
+
     best = _.max(solutions, (sack) -> sack.value)
     console.log "Best algorithm was " + solutions.indexOf(best)
     best.contents
