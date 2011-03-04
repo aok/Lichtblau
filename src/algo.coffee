@@ -18,7 +18,15 @@ exports.stooped = (obj) ->
 
 exports.selectByBangForBuck = (obj) ->
     items = obj.contents
-    _.map(items, (item) -> item.bang = item.value / item.weight[0])
+    
+    calculateBang = (item) ->
+        item.bang = item.value
+        dilute = (wx) ->
+            item.bang = item.bang / wx
+                
+        dilute w for w in item.weight
+
+    _.map(items, calculateBang)
     items = _.sortBy(items, (item) -> -1*item.bang)
 
     substract = (a,b) ->
