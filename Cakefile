@@ -41,7 +41,7 @@ task "test", "Run all tests", ->
     runTests (err)->
         process.stdout.on "drain", -> process.exit -1 if err
 
-postfile = (datafile='spec/round-config.json') ->
+postfile = (datafile='spec/round0-data.json') ->
     http = require "http"
     options = {
         host: 'localhost',
