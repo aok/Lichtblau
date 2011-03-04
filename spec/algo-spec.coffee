@@ -44,7 +44,7 @@ vows.describe('Lichtblau').addBatch(
         'Return some results': (t) ->
             assert.notEqual(0,t.length)
     'Knapsack rules, for round1':
-        topic: whattotest testproblems.round0()
+        topic: whattotest testproblems.round1()
         'Returns an array': (t) ->
             assert.isArray(t)
         'Return some results': (t) ->
