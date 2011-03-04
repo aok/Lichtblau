@@ -1,15 +1,5 @@
 _ = require 'underscore'
 
-exports.fits = (dimensions, capacity) ->
-    stillFits = true
-    compare = (t) ->
-        stillFits = t[0] <= t[1] and stillFits
-
-    tuples = _.zip(dimensions, capacity)
-    compare pair for pair in tuples
-    
-    stillFits
-
 exports.homework = (problem) ->
     [problem?.contents[0]?.id,3]
 
@@ -26,15 +16,19 @@ packFromPrioritisedList = (items, capacity) ->
     subtract = (a,b) ->
         _.map(_.zip(a,b), (tuple) -> tuple[0]-tuple[1])
 
+    fits = (a, b) ->
+        _.all(_.map(_.zip(a, b), (t) -> t[0] <= t[1]))
+
     pack = (item) ->
-        if exports.fits item.weight,sack.space
+        if fits item.weight,sack.space
             sack.space = subtract sack.space,item.weight
             sack.value += item.value
             true
         else
             false
 
-    sack.contents = _.pluck(_.select(items, (item) -> pack item, sack),"id")
+    items = _.select(items, (item) -> pack item, sack)
+    sack.contents = _.pluck(items,"id")
     sack
 
 sortWith = (items, bangFunction) ->
