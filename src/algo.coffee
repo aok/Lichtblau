@@ -13,36 +13,52 @@ exports.fits = (dimensions, capacity) ->
 exports.homework = (obj) ->
     [obj?.contents[0]?.id,3]
 
-exports.stooped = (obj) ->
+stooped = (obj) ->
     []
 
-exports.selectByBangForBuck = (obj) ->
+selectByBangForBuck = (obj, bangFunction) ->
     items = obj.contents
-    
-    calculateBang = (item) ->
-        item.bang = item.value
-        dilute = (wx) ->
-            item.bang = item.bang / wx
-                
-        dilute w for w in item.weight
 
-    _.map(items, calculateBang)
+    _.map(items, bangFunction)
     items = _.sortBy(items, (item) -> -1*item.bang)
 
     substract = (a,b) ->
         _.map(_.zip(a,b), (tuple) -> tuple[0]-tuple[1])
     
     ctx = {
+        value: 0
         space: obj.capacity
+        contents: []
     }
 
     pack = (item) ->
         if exports.fits item.weight,ctx.space
             ctx.space = substract ctx.space,item.weight
+            ctx.value += item.value
             true
         else
             false
     
     sack = _.select(items, (item) -> pack item, ctx)
     
-    _.pluck(sack,"id")
+    console.log ctx.value
+    ctx.contents = _.pluck(sack,"id")
+    ctx
+
+valuePerFirstDimension = (item) ->
+    item.bang = item.value / item.weight[0]
+
+valuePerCubicWeight = (item) ->
+    item.bang = item.value
+    dilute = (wx) ->
+        item.bang = item.bang / wx
+    dilute w for w in item.weight
+
+trySeveral = (obj) ->
+    solutions = []
+    solutions.push(selectByBangForBuck(obj, valuePerFirstDimension))
+    solutions.push(selectByBangForBuck(obj, valuePerCubicWeight))
+    solutions[0].contents
+
+exports.bestSoFar = trySeveral
+

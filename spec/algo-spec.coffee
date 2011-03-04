@@ -5,7 +5,7 @@ assert = require 'assert'
 algo = require '../src/algo'
 testproblems = require './testproblems'
 
-whattotest = algo.selectByBangForBuck
+whattotest = algo.bestSoFar
 
 vows.describe('Lichtblau').addBatch(
     'Homework':
