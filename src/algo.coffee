@@ -38,7 +38,7 @@ packInOrderOfValuePerSumWeight = (problem) ->
 valuePerSumWeight = (item) ->
     item.bang = item.value / _.reduce(item.weight, ((memo, num) -> memo + num), 0)
 
-randomTriesFromBestFraction = (problem, fraction=2, tries=100) ->
+randomTriesFromBestFraction = (problem, fraction=2, tries=200) ->
     items = sortWith problem.contents, valuePerSumWeight
     items = items[0...items.length/fraction]
 

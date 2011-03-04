@@ -16,4 +16,7 @@ It is built with CoffeeScript, Node.js, Express and Vows.
     cake watch
     cake server
     cake test
-    cake post
+
+## Testing with curl
+
+    curl -H "Content-Type: application/json" -d @spec/round0-challenge0-data.json  http://localhost:8000
