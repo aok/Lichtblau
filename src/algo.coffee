@@ -16,7 +16,6 @@ exports.homework = (problem) ->
 stooped = (problem) ->
     []
 
-
 packFromPrioritisedList = (items, capacity) ->
     sack = {
         value: 0
@@ -90,6 +89,5 @@ tryManyAndChooseBest = (problem) ->
     best = _.max(solutions, (sack) -> sack.value)
     console.log "Best algorithm was " + solutions.indexOf(best)
     best.contents
-
 
 exports.bestSoFar = tryManyAndChooseBest

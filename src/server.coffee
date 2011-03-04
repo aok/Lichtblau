@@ -13,7 +13,6 @@ logParameters = (obj) ->
     }
     console.log JSON.stringify params
 
-
 app = express.createServer(
     express.logger(logformat),
     express.bodyDecoder('application/json')

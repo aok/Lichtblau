@@ -26,12 +26,14 @@ vows.describe('Lichtblau').addBatch(
             assert.isArray(t)
         'Returns [3]': (t) ->
             assert.deepEqual(t, ['3'])
+
     'Knapsack rules, for round0':
         topic: whattotest testproblems.challenge(0,1)
         'Returns an array': (t) ->
             assert.isArray(t)
         'Return some results': (t) ->
             assert.notEqual(0,t.length)
+
     'Knapsack rules, for round 1':
         'Challenge 1':
             topic: whattotest testproblems.challenge(1,1)
@@ -69,6 +71,7 @@ vows.describe('Lichtblau').addBatch(
                 assert.isArray(t)
             'Return some results': (t) ->
                 assert.notEqual(0,t.length)
+
     'Knapsack rules, for round 2':
         'Challenge 1':
             topic: whattotest testproblems.challenge(2,1)

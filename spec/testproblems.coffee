@@ -9,7 +9,8 @@ exports.e0 = {
             {"id":"3","weight":[30,60,90],"value":200}
         ],
         "capacity":[99,10,1000]
-    }
+}
+
 exports.e1 = {
     "name":"lol",
     "timeout":6000,
@@ -20,6 +21,7 @@ exports.e1 = {
     ],
     "capacity":[99,30,1000]
 }
+
 exports.e2 = {
     "name":"lol",
     "timeout":6000,
@@ -30,6 +32,7 @@ exports.e2 = {
     ],
     "capacity":[99,70,1000]
 }
+
 exports.challenge = (round, challenge) ->
     getRound(round).challenges[challenge-1]
 
