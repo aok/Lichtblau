@@ -13,13 +13,13 @@ packFromPrioritisedList = (items, capacity) ->
         contents: []
     }
 
-    subtract = (a,b) ->
-        _.map(_.zip(a,b), (tuple) -> tuple[0]-tuple[1])
-
-    fits = (a, b) ->
-        _.all(_.map(_.zip(a, b), (t) -> t[0] <= t[1]))
-
     pack = (item) ->
+        subtract = (a,b) ->
+            _.map(_.zip(a,b), (tuple) -> tuple[0]-tuple[1])
+
+        fits = (a, b) ->
+            _.all(_.map(_.zip(a, b), (t) -> t[0] <= t[1]))
+        
         if fits item.weight,sack.space
             sack.space = subtract sack.space,item.weight
             sack.value += item.value
