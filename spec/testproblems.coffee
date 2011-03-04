@@ -1,6 +1,5 @@
 fs = require 'fs'
 
-
 exports.e0 = {
         "name":"lol",
         "timeout":6000,
@@ -31,28 +30,13 @@ exports.e2 = {
     ],
     "capacity":[99,70,1000]
 }
-exports.round0 = () ->
-    readRound(0)
+exports.challenge = (round, challenge) ->
+    getRound(round).challenges[challenge-1]
 
-exports.round1challenge1 = () ->
-    readRound(1).challenges[0]
-
-exports.round1challenge2 = () ->
-    readRound(1).challenges[1]
-
-exports.round1challenge3 = () ->
-    readRound(1).challenges[2]
-
-exports.round1challenge4 = () ->
-    readRound(1).challenges[3]
-
-exports.round1challenge5 = () ->
-    readRound(1).challenges[4]
-
-exports.round1challenge6 = () ->
-    readRound(1).challenges[5]
-
-readRound = (round) ->
-    path = fs.realpathSync('spec/round'+round+'-data.json')
-    JSON.parse(fs.readFileSync path)
+rounds = []
+getRound = (idx) ->
+    if not rounds[idx]
+        path = fs.realpathSync('spec/round'+idx+'-data.json')
+        rounds[idx] = JSON.parse(fs.readFileSync path)
+    rounds[idx]
     
