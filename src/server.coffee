@@ -26,7 +26,7 @@ app.get('/', (req, res) ->
 
 app.post('/', (req, res) ->
     logParameters req.body
-    res.contentType('application/json; charset=utf8')    
+    res.contentType('application/json; charset=utf8')
     res.send JSON.stringify(process req.body)
 )
 
