@@ -23,10 +23,10 @@ packFromPrioritisedList = (items, capacity) ->
         space: capacity
         contents: []
     }
-    
+
     subtract = (a,b) ->
         _.map(_.zip(a,b), (tuple) -> tuple[0]-tuple[1])
-    
+
     pack = (item) ->
         if exports.fits item.weight,sack.space
             sack.space = subtract sack.space,item.weight
@@ -34,7 +34,7 @@ packFromPrioritisedList = (items, capacity) ->
             true
         else
             false
-            
+
     sack.contents = _.pluck(_.select(items, (item) -> pack item, sack),"id")
     sack
 
@@ -55,7 +55,13 @@ packInOrderOfValue = (problem) ->
 
 packInOrderOfValuePerFirstWeightDimension = (problem) ->
     sortWithAndPack problem, (item) -> item.bang = item.value / item.weight[0]
-    
+
+packInOrderOfValuePerSecondWeightDimension = (problem) ->
+    sortWithAndPack problem, (item) -> item.bang = item.value / item.weight[1]
+
+packInOrderOfValuePerThirdWeightDimension = (problem) ->
+    sortWithAndPack problem, (item) -> item.bang = item.value / item.weight[2]
+
 valuePerCubicWeight = (item) ->
     item.bang = item.value
     dilute = (wx) ->
@@ -70,6 +76,20 @@ tryThreeSortsAndReturnBest = (problem) ->
     ]
     best = _.max(solutions, (sack) -> sack.value)
     best.contents
-    
-exports.bestSoFar = tryThreeSortsAndReturnBest
 
+tryManyAndChooseBest = (problem) ->
+    solutions = [
+        packInOrderOfValuePerCubicWeight(problem),
+        packInOrderOfValue(problem),
+        packInOrderOfValuePerFirstWeightDimension(problem)
+    ]
+    if problem.capacity.length >= 2
+        solutions.push(packInOrderOfValuePerSecondWeightDimension(problem))
+    if problem.capacity.length >= 3
+        solutions.push(packInOrderOfValuePerThirdWeightDimension(problem))
+    best = _.max(solutions, (sack) -> sack.value)
+    console.log "Best algorithm was " + solutions.indexOf(best)
+    best.contents
+
+
+exports.bestSoFar = tryManyAndChooseBest

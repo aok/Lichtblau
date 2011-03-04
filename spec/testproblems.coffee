@@ -34,9 +34,23 @@ exports.e2 = {
 exports.round0 = () ->
     readRound(0)
 
-exports.round1 = () ->
-    readRound(1)
+exports.round1challenge1 = () ->
+    readRound(1).challenges[0]
 
+exports.round1challenge2 = () ->
+    readRound(1).challenges[1]
+
+exports.round1challenge3 = () ->
+    readRound(1).challenges[2]
+
+exports.round1challenge4 = () ->
+    readRound(1).challenges[3]
+
+exports.round1challenge5 = () ->
+    readRound(1).challenges[4]
+
+exports.round1challenge6 = () ->
+    readRound(1).challenges[5]
 
 readRound = (round) ->
     path = fs.realpathSync('spec/round'+round+'-data.json')
