@@ -53,27 +53,25 @@ cubicValuePerCubicWeight = (item) ->
 valuePerSumWeight = (item) ->
     item.bang = item.value / _.reduce(item.weight, ((memo, num) -> memo + num), 0)
 
-randomTriesFromBestFraction = (problem, fraction=2, tries=20) ->
+randomTriesFromBestFraction = (problem, fraction=2, tries=100) ->
     items = sortWith problem.contents, valuePerSumWeight
     items = items[0...items.length/fraction]
     
-    tries = [0..tries]
     sacks = []
     
     newRandomSack = (i) ->
         items = _.sortBy(items, Math.random)
         sacks.push packFromPrioritisedList items, problem.capacity
         
-    newRandomSack i for i in [0..100]
+    newRandomSack i for i in [0..tries]
     
     _.max(sacks, (sack) -> sack.value)
 
 sortDiscardAndSortAgain = (problem) ->
-    items = sortWith problem.contents, cubicValuePerCubicWeight
-    items = items[0...items.length/3]
+    items = sortWith problem.contents, valuePerSumWeight
+    items = items[0...items.length/2]
     
-    sortWithAndPack problem, (item) -> item.bang = item.value / item.weight[0]
-
+    sortWithAndPack problem, cubicValuePerCubicWeight
 
 
 tryManyAndChooseBest = (problem) ->

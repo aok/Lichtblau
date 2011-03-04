@@ -7,6 +7,19 @@ testproblems = require './testproblems'
 
 whattotest = algo.bestSoFar
 
+runChallenges = () ->    
+    solutions = []
+    
+    doChallenge = (i,j) ->
+        solutions.push whattotest testproblems.challenge(i,j)
+    
+    doRound = (i) ->
+        doChallenge i,j for j in [1..6]
+    
+    doRound i for i in [1..4]
+    
+    solutions
+
 vows.describe('Lichtblau').addBatch(
     'Knapsack rules, when nothing fits':
         topic: whattotest testproblems.e0
@@ -26,87 +39,16 @@ vows.describe('Lichtblau').addBatch(
             assert.isArray(t)
         'Returns [3]': (t) ->
             assert.deepEqual(t, ['3'])
-
+    
     'Knapsack rules, for round0':
         topic: whattotest testproblems.challenge(0,1)
         'Returns an array': (t) ->
             assert.isArray(t)
         'Return some results': (t) ->
             assert.notEqual(0,t.length)
-
-    'Knapsack rules, for round 1':
-        'Challenge 1':
-            topic: whattotest testproblems.challenge(1,1)
-            'Returns an array': (t) ->
-                assert.isArray(t)
-            'Return some results': (t) ->
-                assert.notEqual(0,t.length)
-        'Challenge 2':
-            topic: whattotest testproblems.challenge(1,2)
-            'Returns an array': (t) ->
-                assert.isArray(t)
-            'Return some results': (t) ->
-                assert.notEqual(0,t.length)
-        'Challenge 3':
-            topic: whattotest testproblems.challenge(1,3)
-            'Returns an array': (t) ->
-                assert.isArray(t)
-            'Return some results': (t) ->
-                assert.notEqual(0,t.length)
-        'Challenge 4':
-            topic: whattotest testproblems.challenge(1,4)
-            'Returns an array': (t) ->
-                assert.isArray(t)
-            'Return some results': (t) ->
-                assert.notEqual(0,t.length)
-        'Challenge 5':
-            topic: whattotest testproblems.challenge(1,5)
-            'Returns an array': (t) ->
-                assert.isArray(t)
-            'Return some results': (t) ->
-                assert.notEqual(0,t.length)
-        'Challenge 6':
-            topic: whattotest testproblems.challenge(1,6)
-            'Returns an array': (t) ->
-                assert.isArray(t)
-            'Return some results': (t) ->
-                assert.notEqual(0,t.length)
-
-    'Knapsack rules, for round 2':
-        'Challenge 1':
-            topic: whattotest testproblems.challenge(2,1)
-            'Returns an array': (t) ->
-                assert.isArray(t)
-            'Return some results': (t) ->
-                assert.notEqual(0,t.length)
-        'Challenge 2':
-            topic: whattotest testproblems.challenge(2,2)
-            'Returns an array': (t) ->
-                assert.isArray(t)
-            'Return some results': (t) ->
-                assert.notEqual(0,t.length)
-        'Challenge 3':
-            topic: whattotest testproblems.challenge(2,3)
-            'Returns an array': (t) ->
-                assert.isArray(t)
-            'Return some results': (t) ->
-                assert.notEqual(0,t.length)
-        'Challenge 4':
-            topic: whattotest testproblems.challenge(2,4)
-            'Returns an array': (t) ->
-                assert.isArray(t)
-            'Return some results': (t) ->
-                assert.notEqual(0,t.length)
-        'Challenge 5':
-            topic: whattotest testproblems.challenge(2,5)
-            'Returns an array': (t) ->
-                assert.isArray(t)
-            'Return some results': (t) ->
-                assert.notEqual(0,t.length)
-        'Challenge 6':
-            topic: whattotest testproblems.challenge(2,6)
-            'Returns an array': (t) ->
-                assert.isArray(t)
-            'Return some results': (t) ->
-                assert.notEqual(0,t.length)
+    
+    'Basic validation for all example rounds':
+        topic: runChallenges()
+        'Returns an array of arrays': (t) ->
+            assert.isArray(t)
 ).export(module)
