@@ -41,32 +41,6 @@ task "test", "Run all tests", ->
     runTests (err)->
         process.stdout.on "drain", -> process.exit -1 if err
 
-postfile = (datafile='spec/round0-data.json') ->
-    http = require "http"
-    options = {
-        host: 'localhost',
-        port: 8000,
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json; charset=utf-8'
-        }
-    }
-    req = http.request(options, (res) ->
-        log res.statusCode, green
-        res.setEncoding 'utf8'
-        res.on('data', (chunk) ->
-            log chunk, green
-        )
-    )
-    fs.readFile(datafile, (err, data) ->
-        throw err if err
-        req.write data
-        req.end()
-    )
-
-task "post", "post example json to server", ->
-    postfile()
-
 #option '-f', '--inputfile [FILE]', 'file to read from'
 #
 #prettyprint = (inputfile='spec/round-config.json') ->
