@@ -17,6 +17,13 @@ class Sack
             true
         else
             false
+    
+    drop: (item) ->
+        add = (a, b) ->
+            _.map(_.zip(a,b), (tuple) -> tuple[0]+tuple[1])
+
+        @contents = _.without @contents
+        @capacity = add @capacity, item.weight
 
 packFromPrioritisedList = (items, capacity) ->
     sack = new Sack capacity
@@ -38,38 +45,24 @@ packInOrderOfValuePerSumWeight = (problem) ->
 valuePerSumWeight = (item) ->
     item.bang = item.value / _.reduce(item.weight, ((memo, num) -> memo + num), 0)
 
-randomTriesFromBestFractionUntilTimeout = (problem, fraction=2, timeout=1000) ->
+randomTriesFromBestFraction = (problem, fraction=10, tries=1000) ->
     items = sortWith problem.contents, valuePerSumWeight
     items = items[0...items.length/fraction]
     
-    generator = () ->
-        randomSack items, problem.capacity
+    sacks = []
     
-    improveUntilTimeout generator(), generator, timeout
-
-randomSack = (items, capacity) ->
-    packFromPrioritisedList _.sortBy(items, Math.random), capacity
-
-improveUntilTimeout = (start, generator, timeout=1000) ->
+    newRandomSack = () ->
+        items = _.sortBy(items, Math.random)
+        sacks.push packFromPrioritisedList items, problem.capacity
+        
+    newRandomSack() for i in [0..tries]
     
-    sack = start
-    
-    tryAnother = () ->
-        newSack = generator(sack)
-        if newSack.value > sack.value
-            sack = newSack
-
-    dl = (new Date).getTime()+timeout
-    tryAnother() while (new Date).getTime() < dl
-
-    sack
+    _.max(sacks, (sack) -> sack.value)
 
 tryManyAndChooseBest = (problem) ->
-    #to = _.min(5000,problem.timeout-3000)
-    to = problem.timeout-3000
     solutions = [
         packInOrderOfValuePerSumWeight(problem),
-        randomTriesFromBestFractionUntilTimeout(problem,2,to)
+        randomTriesFromBestFraction(problem)
     ]
 
     values = _.pluck(solutions, "value")

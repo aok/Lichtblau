@@ -36,6 +36,7 @@ vows.describe('Lichtblau').addBatch(
             topic: loops(99999999999,3000)
             'Returns less than max ': (t) ->
                 assert.isTrue(t<99999999999) 
+                
     'Knapsack rules, when nothing fits':
         topic: whattotest testproblems.e0
         'Returns an array': (t) ->
