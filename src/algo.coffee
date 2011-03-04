@@ -10,10 +10,10 @@ exports.fits = (dimensions, capacity) ->
     
     stillFits
 
-exports.homework = (obj) ->
-    [obj?.contents[0]?.id,3]
+exports.homework = (problem) ->
+    [problem?.contents[0]?.id,3]
 
-stooped = (obj) ->
+stooped = (problem) ->
     []
 
 
@@ -42,29 +42,34 @@ sortWith = (items, bangFunction) ->
     _.map(items, bangFunction)
     _.sortBy(items, (item) -> -1*item.bang)
 
-packInOrderOfValuePerCubicWeight = (obj) ->
-    items = sortWith obj.contents, valuePerCubicWeight
-    sack = packFromPrioritisedList items, obj.capacity
-    console.log sack
-    sack.contents
+sortWithAndPack = (problem, f) ->
+    items = sortWith problem.contents, f
+    sack = packFromPrioritisedList items, problem.capacity
+    sack
 
-packInOrderOfValue = (obj) ->
-    items = sortWith obj.contents, (item) -> item.bang = item.value
-    sack = packFromPrioritisedList items, obj.capacity
-    console.log sack
-    sack.contents
+packInOrderOfValuePerCubicWeight = (problem) ->
+    sortWithAndPack problem,valuePerCubicWeight
 
-packInOrderOfValuePerFirstWeightDimension = (obj) ->
-    items = sortWith obj.contents, (item) -> item.bang = item.value / item.weight[0]
-    sack = packFromPrioritisedList items, obj.capacity
-    console.log sack
-    sack.contents
+packInOrderOfValue = (problem) ->
+    sortWithAndPack problem, (item) -> item.bang = item.value
 
+packInOrderOfValuePerFirstWeightDimension = (problem) ->
+    sortWithAndPack problem, (item) -> item.bang = item.value / item.weight[0]
+    
 valuePerCubicWeight = (item) ->
     item.bang = item.value
     dilute = (wx) ->
         item.bang = item.bang / wx
     dilute w for w in item.weight
 
-exports.bestSoFar = packInOrderOfValuePerCubicWeight
+tryThreeSortsAndReturnBest = (problem) ->
+    solutions = [
+        packInOrderOfValuePerCubicWeight(problem),
+        packInOrderOfValue(problem),
+        packInOrderOfValuePerFirstWeightDimension(problem)
+    ]
+    best = _.max(solutions, (sack) -> sack.value)
+    best.contents
+    
+exports.bestSoFar = tryThreeSortsAndReturnBest
 
