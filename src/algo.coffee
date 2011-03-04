@@ -48,6 +48,18 @@ packInOrderOfValuePerCubicWeight = (obj) ->
     console.log sack
     sack.contents
 
+packInOrderOfValue = (obj) ->
+    items = sortWith obj.contents, (item) -> item.bang = item.value
+    sack = packFromPrioritisedList items, obj.capacity
+    console.log sack
+    sack.contents
+
+packInOrderOfValuePerFirstWeightDimension = (obj) ->
+    items = sortWith obj.contents, (item) -> item.bang = item.value / item.weight[0]
+    sack = packFromPrioritisedList items, obj.capacity
+    console.log sack
+    sack.contents
+
 valuePerCubicWeight = (item) ->
     item.bang = item.value
     dilute = (wx) ->
