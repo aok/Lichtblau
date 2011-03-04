@@ -1,5 +1,23 @@
 _ = require 'underscore'
 
+class Sack
+    constructor: (@capacity, @value = 0, @contents = []) ->
+
+    pack: (item) ->
+        subtract = (a, b) ->
+            _.map(_.zip(a,b), (tuple) -> tuple[0]-tuple[1])
+
+        fits = (a, b) ->
+            _.all(_.map(_.zip(a, b), (t) -> t[0] <= t[1]))
+
+        if fits item.weight, @capacity
+            @capacity = subtract @capacity, item.weight
+            @value += item.value
+            @contents.push(item.id)
+            true
+        else
+            false
+
 exports.homework = (problem) ->
     [problem?.contents[0]?.id,3]
 
@@ -7,28 +25,8 @@ stooped = (problem) ->
     []
 
 packFromPrioritisedList = (items, capacity) ->
-    sack = {
-        value: 0
-        space: capacity
-        contents: []
-    }
-
-    pack = (item) ->
-        subtract = (a,b) ->
-            _.map(_.zip(a,b), (tuple) -> tuple[0]-tuple[1])
-
-        fits = (a, b) ->
-            _.all(_.map(_.zip(a, b), (t) -> t[0] <= t[1]))
-        
-        if fits item.weight,sack.space
-            sack.space = subtract sack.space,item.weight
-            sack.value += item.value
-            true
-        else
-            false
-
-    items = _.select(items, (item) -> pack item, sack)
-    sack.contents = _.pluck(items,"id")
+    sack = new Sack capacity
+    _.each(items, (item) -> sack.pack item)
     sack
 
 sortWith = (items, bangFunction) ->
