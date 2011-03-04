@@ -1,7 +1,7 @@
 express = require 'express'
 algo = require "./algo"
 
-process = algo.firstThatFits
+process = algo.selectByBangForBuck
 
 logformat = {format: '>\t:method :url \t\":req[content-type]\" \n<\t:status \t\":req[content-type]\" \t:response-timems'}
 

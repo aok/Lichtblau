@@ -38,9 +38,3 @@ exports.selectByBangForBuck = (obj) ->
     sack = _.select(items, (item) -> pack item, ctx)
     
     _.pluck(sack,"id")
-
-
-
-
-
-
