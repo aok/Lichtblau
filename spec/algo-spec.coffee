@@ -3,47 +3,16 @@ _ = require 'underscore'
 assert = require 'assert'
 
 algo = require '../src/algo'
-#testdata = require './testproblems'
-#foo()
+testproblems = require './testproblems'
+testproblems.foo()
 
-
-e0 = {
-    "name":"lol",
-    "timeout":6000,
-    "contents":[
-        {"id":"1","weight":[10,20,30],"value":40},
-        {"id":"2","weight":[40,50,60],"value":100},
-        {"id":"3","weight":[30,60,90],"value":200}
-    ],
-    "capacity":[99,10,1000]
-}
-e1 = {
-    "name":"lol",
-    "timeout":6000,
-    "contents":[
-        {"id":"1","weight":[10,20,30],"value":40},
-        {"id":"2","weight":[40,50,60],"value":100},
-        {"id":"3","weight":[30,60,90],"value":200}
-    ],
-    "capacity":[99,30,1000]
-}
-e2 = {
-    "name":"lol",
-    "timeout":6000,
-    "contents":[
-        {"id":"1","weight":[10,20,30],"value":40},
-        {"id":"2","weight":[40,50,60],"value":100},
-        {"id":"3","weight":[30,60,90],"value":200}
-    ],
-    "capacity":[99,70,1000]
-}
 
 
 whattotest = algo.firstThatFits
 
 vows.describe('Lichtblau').addBatch(
     'Homework':
-        topic: algo.homework e0
+        topic: algo.homework testproblems.e0
         'Returns an array of length 2': (topic) ->
             assert.equal(topic.length, 2)
         'Returns an array with first element 1': (topic) ->
@@ -54,19 +23,19 @@ vows.describe('Lichtblau').addBatch(
             assert.deepEqual(topic, [1,3])
 ).addBatch(
     'Knapsack rules, when nothing fits':
-        topic: whattotest e0
+        topic: whattotest testproblems.e0
         'Returns an array': (t) ->
             assert.isArray(t)
         'Array is empty': (t) ->
             assert.isEmpty(t)
     'Knapsack rules, when one fits':
-        topic: whattotest e1
+        topic: whattotest testproblems.e1
         'Returns an array': (t) ->
             assert.isArray(t)
         'Returns [1]': (t) ->
             assert.deepEqual(t, ['1'])
     'Knapsack rules, when two fit':
-        topic: whattotest e2
+        topic: whattotest testproblems.e2
         'Returns an array': (t) ->
             assert.isArray(t)
         'Returns [1, 2]': (t) ->
