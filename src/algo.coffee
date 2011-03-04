@@ -41,6 +41,7 @@ valuePerSumWeight = (item) ->
 randomTriesFromBestFraction = (problem, fraction=2, tries=100) ->
     items = sortWith problem.contents, valuePerSumWeight
     items = items[0...items.length/fraction]
+
     
     sacks = []
     
