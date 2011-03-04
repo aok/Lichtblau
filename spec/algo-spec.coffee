@@ -20,7 +20,22 @@ runChallenges = () ->
     
     solutions
 
+loops = (max, timeout) ->
+    i = 0
+    dl = (new Date).getTime()+timeout
+    i++ while i < max and (new Date).getTime() < dl
+    i
+
 vows.describe('Lichtblau').addBatch(
+    'Timeout testing':
+        'when max 1000 and timeout is 10ms':
+            topic: loops(1000,10)
+            'Returns 1000': (t) ->
+                assert.equal(t,1000)
+        'when max 99999999999 and timeout is 3s':
+            topic: loops(99999999999,3000)
+            'Returns less than max ': (t) ->
+                assert.isTrue(t<99999999999) 
     'Knapsack rules, when nothing fits':
         topic: whattotest testproblems.e0
         'Returns an array': (t) ->

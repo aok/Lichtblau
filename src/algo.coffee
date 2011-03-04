@@ -38,24 +38,42 @@ packInOrderOfValuePerSumWeight = (problem) ->
 valuePerSumWeight = (item) ->
     item.bang = item.value / _.reduce(item.weight, ((memo, num) -> memo + num), 0)
 
-randomTriesFromBestFraction = (problem, fraction=2, tries=100) ->
+randomTriesFromBestFractionUntilTimeout = (problem, fraction=2, timeout=1000) ->
     items = sortWith problem.contents, valuePerSumWeight
     items = items[0...items.length/fraction]
     
-    sacks = []
+    generator = () ->
+        randomSack items, problem.capacity
     
-    newRandomSack = (i) ->
-        items = _.sortBy(items, Math.random)
-        sacks.push packFromPrioritisedList items, problem.capacity
-        
-    newRandomSack i for i in [0..tries]
+    improveUntilTimeout generator(), generator, timeout
+
+randomSack = (items, capacity) ->
+    packFromPrioritisedList _.sortBy(items, Math.random), capacity
+
+
+randomUntilTimeout = (problem, timeout=500) ->
+    generator = () ->
+        randomSack problem.contents, problem.capacity
+    improveUntilTimeout generator(), generator, timeout
+
+improveUntilTimeout = (start, generator, timeout=1000) ->
     
-    _.max(sacks, (sack) -> sack.value)
+    sack = start
+    
+    tryAnother = () ->
+        newSack = generator(sack)
+        if newSack.value > sack.value
+            sack = newSack
+
+    dl = (new Date).getTime()+timeout
+    tryAnother() while (new Date).getTime() < dl
+
+    sack
 
 tryManyAndChooseBest = (problem) ->
     solutions = [
         packInOrderOfValuePerSumWeight(problem),
-        randomTriesFromBestFraction(problem)
+        randomTriesFromBestFractionUntilTimeout(problem)
     ]
 
     values = _.pluck(solutions, "value")
