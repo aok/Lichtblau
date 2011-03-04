@@ -49,6 +49,9 @@ sortWithAndPack = (problem, f) ->
 packInOrderOfValuePerCubicWeight = (problem) ->
     sortWithAndPack problem,valuePerCubicWeight
 
+packInOrderOfCubicValuePerCubicWeight = (problem) ->
+    sortWithAndPack problem,cubicValuePerCubicWeight
+
 packInOrderOfValue = (problem) ->
     sortWithAndPack problem, (item) -> item.bang = item.value
 
@@ -67,20 +70,18 @@ valuePerCubicWeight = (item) ->
         item.bang = item.bang / wx
     dilute w for w in item.weight
 
-tryThreeSortsAndReturnBest = (problem) ->
-    solutions = [
-        packInOrderOfValuePerCubicWeight(problem),
-        packInOrderOfValue(problem),
-        packInOrderOfValuePerFirstWeightDimension(problem)
-    ]
-    best = _.max(solutions, (sack) -> sack.value)
-    best.contents
+cubicValuePerCubicWeight = (item) ->
+    item.bang = Math.pow(item.value,item.weight.length)
+    dilute = (wx) ->
+        item.bang = item.bang / wx
+    dilute w for w in item.weight
 
 tryManyAndChooseBest = (problem) ->
     solutions = [
-        packInOrderOfValuePerCubicWeight(problem),
         packInOrderOfValue(problem),
         packInOrderOfValuePerFirstWeightDimension(problem)
+        packInOrderOfValuePerCubicWeight(problem),
+        packInOrderOfCubicValuePerCubicWeight(problem)
     ]
     if problem.capacity.length >= 2
         solutions.push(packInOrderOfValuePerSecondWeightDimension(problem))
