@@ -58,24 +58,42 @@ packInOrderOfValuePerSecondWeightDimension = (problem) ->
 packInOrderOfValuePerThirdWeightDimension = (problem) ->
     sortWithAndPack problem, (item) -> item.bang = item.value / item.weight[2]
 
-valuePerCubicWeight = (item) ->
-    item.bang = item.value
+nDilute = (item) ->
     dilute = (wx) ->
         item.bang = item.bang / wx
     dilute w for w in item.weight
+    
+
+valuePerCubicWeight = (item) ->
+    item.bang = item.value
+    nDilute item
 
 cubicValuePerCubicWeight = (item) ->
     item.bang = Math.pow(item.value,item.weight.length)
-    dilute = (wx) ->
-        item.bang = item.bang / wx
-    dilute w for w in item.weight
+    nDilute item
+
+randomTriesFromBestThird = (problem) ->
+    items = sortWith problem.contents, cubicValuePerCubicWeight
+    items = items[0...items.length/3]
+    
+    tries = [0..10]
+    sacks = []
+    
+    newRandomSack = (i) ->
+        items = _.sortBy(items, Math.random)
+        sacks.push packFromPrioritisedList items, problem.capacity
+        
+    newRandomSack i for i in [0..100]
+    
+    _.max(sacks, (sack) -> sack.value)
 
 tryManyAndChooseBest = (problem) ->
     solutions = [
         packInOrderOfValue(problem),
         packInOrderOfValuePerFirstWeightDimension(problem)
         packInOrderOfValuePerCubicWeight(problem),
-        packInOrderOfCubicValuePerCubicWeight(problem)
+        packInOrderOfCubicValuePerCubicWeight(problem),
+        randomTriesFromBestThird(problem)
     ]
     if problem.capacity.length >= 2
         solutions.push(packInOrderOfValuePerSecondWeightDimension(problem))
