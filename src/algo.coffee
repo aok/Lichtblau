@@ -84,8 +84,9 @@ tryManyAndChooseBest = (problem) ->
         randomTriesFromBestFraction(problem)
     ]
 
+    values = _.pluck(solutions, "value")
     best = _.max(solutions, (sack) -> sack.value)
-    console.log "Best algorithm was " + solutions.indexOf(best)
+    console.log "Got values "+values+" - algo "+solutions.indexOf(best)+" wins"
     best.contents
 
 exports.bestSoFar = tryManyAndChooseBest
