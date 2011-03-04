@@ -39,10 +39,6 @@ exports.round1 = () ->
 
 
 readRound = (round) ->
-    data = ''
-    fs.readFile 'spec/round'+round+'-data.json', (err, contents) ->
-        throw err if err
-        console.log contents.length
-        data = JSON.parse contents
-    data
+    path = fs.realpathSync('spec/round'+round+'-data.json')
+    JSON.parse(fs.readFileSync path)
     

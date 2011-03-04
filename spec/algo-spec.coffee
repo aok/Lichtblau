@@ -5,7 +5,7 @@ assert = require 'assert'
 algo = require '../src/algo'
 testproblems = require './testproblems'
 
-whattotest = algo.firstThatFits
+whattotest = algo.singlePassIterationPack
 
 vows.describe('Lichtblau').addBatch(
     'Homework':

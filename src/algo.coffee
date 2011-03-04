@@ -56,7 +56,6 @@ exports.oneThatFits = (obj) ->
     _.toArray sack.ids
 
 exports.singlePassIterationPack = (obj) ->
-
     sack =
         ids:    []
         dims:   (0 for item in obj.capacity)
