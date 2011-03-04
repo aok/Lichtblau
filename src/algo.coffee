@@ -16,37 +16,37 @@ exports.homework = (obj) ->
 stooped = (obj) ->
     []
 
-selectByBangForBuck = (obj, bangFunction) ->
-    items = obj.contents
 
-    _.map(items, bangFunction)
-    items = _.sortBy(items, (item) -> -1*item.bang)
-
-    substract = (a,b) ->
-        _.map(_.zip(a,b), (tuple) -> tuple[0]-tuple[1])
-    
-    ctx = {
+packFromPrioritisedList = (items, capacity) ->
+    sack = {
         value: 0
-        space: obj.capacity
+        space: capacity
         contents: []
     }
-
+    
+    subtract = (a,b) ->
+        _.map(_.zip(a,b), (tuple) -> tuple[0]-tuple[1])
+    
     pack = (item) ->
-        if exports.fits item.weight,ctx.space
-            ctx.space = substract ctx.space,item.weight
-            ctx.value += item.value
+        if exports.fits item.weight,sack.space
+            sack.space = subtract sack.space,item.weight
+            sack.value += item.value
             true
         else
             false
-    
-    sack = _.select(items, (item) -> pack item, ctx)
-    
-    console.log ctx.value
-    ctx.contents = _.pluck(sack,"id")
-    ctx
+            
+    sack.contents = _.pluck(_.select(items, (item) -> pack item, sack),"id")
+    sack
 
-valuePerFirstDimension = (item) ->
-    item.bang = item.value / item.weight[0]
+sortWith = (items, bangFunction) ->
+    _.map(items, bangFunction)
+    _.sortBy(items, (item) -> -1*item.bang)
+
+packInOrderOfValuePerCubicWeight = (obj) ->
+    items = sortWith obj.contents, valuePerCubicWeight
+    sack = packFromPrioritisedList items, obj.capacity
+    console.log sack
+    sack.contents
 
 valuePerCubicWeight = (item) ->
     item.bang = item.value
@@ -54,11 +54,5 @@ valuePerCubicWeight = (item) ->
         item.bang = item.bang / wx
     dilute w for w in item.weight
 
-trySeveral = (obj) ->
-    solutions = []
-    solutions.push(selectByBangForBuck(obj, valuePerFirstDimension))
-    solutions.push(selectByBangForBuck(obj, valuePerCubicWeight))
-    solutions[0].contents
-
-exports.bestSoFar = trySeveral
+exports.bestSoFar = packInOrderOfValuePerCubicWeight
 
