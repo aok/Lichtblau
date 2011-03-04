@@ -3,10 +3,11 @@ _ = require 'underscore'
 assert = require 'assert'
 
 algo = require '../src/algo'
+#testdata = require './testproblems'
+#foo()
 
-whattotest = algo.firstThatFits
 
-exampleOfNothingFitting = {
+e0 = {
     "name":"lol",
     "timeout":6000,
     "contents":[
@@ -16,7 +17,7 @@ exampleOfNothingFitting = {
     ],
     "capacity":[99,10,1000]
 }
-exampleOfOneFitting = {
+e1 = {
     "name":"lol",
     "timeout":6000,
     "contents":[
@@ -26,7 +27,7 @@ exampleOfOneFitting = {
     ],
     "capacity":[99,30,1000]
 }
-exampleOfTwoFitting = {
+e2 = {
     "name":"lol",
     "timeout":6000,
     "contents":[
@@ -37,9 +38,12 @@ exampleOfTwoFitting = {
     "capacity":[99,70,1000]
 }
 
-vows.describe('Homework').addBatch(
-    'Basics':
-        topic: algo.homework exampleOfNothingFitting
+
+whattotest = algo.firstThatFits
+
+vows.describe('Lichtblau').addBatch(
+    'Homework':
+        topic: algo.homework e0
         'Returns an array of length 2': (topic) ->
             assert.equal(topic.length, 2)
         'Returns an array with first element 1': (topic) ->
@@ -48,30 +52,26 @@ vows.describe('Homework').addBatch(
             assert.equal(topic[1], 3)
         'Returns [1,3]': (topic) ->
             assert.deepEqual(topic, [1,3])
-).export(module)
-
-vows.describe('Rules').addBatch(
+).addBatch(
     'Knapsack rules, when nothing fits':
-        topic: whattotest exampleOfNothingFitting
+        topic: whattotest e0
         'Returns an array': (t) ->
             assert.isArray(t)
         'Array is empty': (t) ->
             assert.isEmpty(t)
     'Knapsack rules, when one fits':
-        topic: whattotest exampleOfOneFitting
+        topic: whattotest e1
         'Returns an array': (t) ->
             assert.isArray(t)
         'Returns [1]': (t) ->
             assert.deepEqual(t, ['1'])
     'Knapsack rules, when two fit':
-        topic: whattotest exampleOfTwoFitting
+        topic: whattotest e2
         'Returns an array': (t) ->
             assert.isArray(t)
         'Returns [1, 2]': (t) ->
             assert.deepEqual(t, ['1', '2'])
-).export(module)
-
-vows.describe('Fits').addBatch(
+).addBatch(
     'Fitting in one dimension':
         'when within capacity':
             topic: algo.fits([1], [2])
