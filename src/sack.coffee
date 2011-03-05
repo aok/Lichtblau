@@ -18,7 +18,6 @@ class Sack
     
     giveByReverseRotate: () ->
         if @cursor == 0
-            console.log "Cursor roll!"
             @cursor = @contents.length
         @contents[--@cursor]
 

@@ -18,7 +18,7 @@ vows.describe('Sacks').addBatch(
             assert.equal(t.value(),0)
     'New Sack with one item':
         topic: ->
-            sack = new sack.Sack [2,2,1]
+            sack = new sack.Sack [2,2,2]
             sack.pack testproblems.i1
             sack
         'has value 10': (t) ->
@@ -31,4 +31,12 @@ vows.describe('Sacks').addBatch(
             assert.equal(t.giveByReverseRotate(),testproblems.i1)
         'pack refuses the same item': (t) ->
             assert.isFalse(t.pack testproblems.i1)
+        'pack accepts another item': (t) ->
+            assert.isTrue(t.pack testproblems.i2)
+            
+            'pack refuses item that no longer fits': (t) ->
+                assert.isFalse(t.pack testproblems.i3)
+            
+        
+            
 ).export(module)
