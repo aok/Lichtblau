@@ -25,6 +25,7 @@ class Sack
         if item?
             @contents = _.without @contents
             @capacity = add @capacity, item.weight
+            @value -= item.value
         else
             console.log "can't drop empty item"
 
@@ -69,6 +70,7 @@ randomTriesFromBestFraction = (problem, fraction=10, tries=1000) ->
 
 greedyThenSwap = (problem, tries=1000) ->
     sack = packInOrderOfValuePerSumWeight(problem)
+    greedyValue = sack.value
     if sack?.contents?.length > 0
         items = sortWith problem.contents,valuePerSumWeight
         
@@ -112,7 +114,7 @@ greedyThenSwap = (problem, tries=1000) ->
         swap() for i in [1..tries]
     else
         console.log "Can't improve on empty sack"
-    console.log "Improved "+successes+" times on "+usedTries+" tries."
+    console.log "Improved from "+greedyValue+" to "+sack.value+" with "+successes+" successful swaps on "+usedTries+" tries."
     sack
 
 tryManyAndChooseBest = (problem) ->

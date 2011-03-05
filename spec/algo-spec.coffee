@@ -55,15 +55,19 @@ vows.describe('Lichtblau').addBatch(
         'Returns [3]': (t) ->
             assert.deepEqual(t, ['3'])
 
-    'Knapsack rules, for round0':
-        topic: whattotest testproblems.challenge(0,1)
+    'Knapsack rules, for round4 challenge 6':
+        topic: whattotest testproblems.challenge(4,6)
         'Returns an array': (t) ->
             assert.isArray(t)
         'Return some results': (t) ->
             assert.notEqual(0,t.length)
+        'Results are unique': (t) ->
+            uniq = _.uniq(t)
+            assert.equal(uniq?.length,t?.length)
 
     'Basic validation for all example rounds':
         topic: runChallenges()
         'Returns an array of arrays': (t) ->
-            assert.isArray(t)
+            for a in t
+                assert.isArray(a)
 ).export(module)
