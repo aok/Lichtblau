@@ -7,17 +7,17 @@ testproblems = require './testproblems'
 
 whattotest = algo.bestSoFar
 
-runChallenges = () ->    
+runChallenges = () ->
     solutions = []
-    
+
     doChallenge = (i,j) ->
         solutions.push whattotest testproblems.challenge(i,j)
-    
+
     doRound = (i) ->
         doChallenge i,j for j in [1..6]
-    
+
     doRound i for i in [1..4]
-    
+
     solutions
 
 loops = (max, timeout) ->
@@ -36,7 +36,7 @@ vows.describe('Lichtblau').addBatch(
             topic: loops(99999999999,3000)
             'Returns less than max ': (t) ->
                 assert.isTrue(t<99999999999) 
-                
+
     'Knapsack rules, when nothing fits':
         topic: whattotest testproblems.e0
         'Returns an array': (t) ->
@@ -55,14 +55,14 @@ vows.describe('Lichtblau').addBatch(
             assert.isArray(t)
         'Returns [3]': (t) ->
             assert.deepEqual(t, ['3'])
-    
+
     'Knapsack rules, for round0':
         topic: whattotest testproblems.challenge(0,1)
         'Returns an array': (t) ->
             assert.isArray(t)
         'Return some results': (t) ->
             assert.notEqual(0,t.length)
-    
+
     'Basic validation for all example rounds':
         topic: runChallenges()
         'Returns an array of arrays': (t) ->

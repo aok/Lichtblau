@@ -17,7 +17,7 @@ class Sack
             true
         else
             false
-    
+
     drop: (item) ->
         add = (a, b) ->
             _.map(_.zip(a,b), (tuple) -> tuple[0]+tuple[1])
@@ -41,22 +41,22 @@ sortWithAndPack = (problem, f) ->
 
 packInOrderOfValuePerSumWeight = (problem) ->
     sortWithAndPack problem,valuePerSumWeight
-    
+
 valuePerSumWeight = (item) ->
     item.bang = item.value / _.reduce(item.weight, ((memo, num) -> memo + num), 0)
 
 randomTriesFromBestFraction = (problem, fraction=10, tries=1000) ->
     items = sortWith problem.contents, valuePerSumWeight
     items = items[0...items.length/fraction]
-    
+
     sacks = []
-    
+
     newRandomSack = () ->
         items = _.sortBy(items, Math.random)
         sacks.push packFromPrioritisedList items, problem.capacity
-        
+
     newRandomSack() for i in [0..tries]
-    
+
     _.max(sacks, (sack) -> sack.value)
 
 tryManyAndChooseBest = (problem) ->
