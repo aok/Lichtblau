@@ -1,7 +1,18 @@
 _ = require 'underscore'
 
 class Sack
-    constructor: (@capacity, @value = 0, @contents = []) ->
+    constructor: (@capacity, @contents = [], @available = []) ->
+        
+    value: () ->
+        _.reduce(@contents, ((memo, item) -> memo + item.value), 0)
+
+    contains: (item) ->
+        _.include(@contents, item)
+
+    giveRandom: () ->
+        idx = Math.floor(Math.random() * (@contents.length-1))
+        @contents[idx]
+
 
     pack: (item) ->
         subtract = (a, b) ->
@@ -13,9 +24,8 @@ class Sack
         fits = (a, b) ->
             _.all(_.map(_.zip(a, b), (t) -> t[0] <= t[1]))
 
-        if (not contains item) and (fits item.weight, @capacity)
+        if not (this.contains item) and fits item.weight, @capacity
             @capacity = subtract @capacity, item.weight
-            @value += item.value
             @contents.push(item)
             true
         else
@@ -25,13 +35,12 @@ class Sack
         add = (a, b) ->
             _.map(_.zip(a,b), (tuple) -> tuple[0]+tuple[1])
         
-        if item?
-            newConts =  _.select @contents, (i) -> i.id != item.id
+        if item? and this.contains item
+            newConts =  _.select @contents, (inside) -> inside.id != item.id
             
             if newConts.length < @contents
                 @contents = newConts
                 @capacity = add @capacity, item.weight
-                @value -= item.value
                 true
             else
                 console.log "can't drop "+item.id+", it is not in the sack"
@@ -69,37 +78,17 @@ valuePerSumWeight = (item) ->
 greedyThenSwap = (problem, tries) ->
     items = sortWith problem.contents, valuePerSumWeight
     sack = packFromPrioritisedList items, problem.capacity
-    greedyValue = sack.value
+    greedyValue = sack.value()
     
     if sack?.contents?.length > 0
         
         successes = 0
         usedTries = 0
-        
-        #selecting things to remove reverses through items added by greedy
-        cursor = 0
+        cursor = sack?.contents?.length
 
-
-        selectDropOut = () ->
-            
-            #FIXME - doesn't work
-            rollBackWards = () ->
-                if cursor == 1
-                    cursor = sack?.contents?.length
-                sack.contents[--cursor]
-
-            #FIXME - doesn't work
-            pickAtRandom = () ->
-                idx = Math.floor(Math.random() * (sack.contents.length-1))
-                sack.contents[idx]
-            
-            pickFirst = () ->
-                sack.contents[0]
-            
-            pickAtRandom()
-        
         selectCandidates = (dropOut) ->
-            items[dropOut.id..items.length]
+            _.without items, sack.contents
+            #items[dropOut.id..items.length]
         
         packDelta = (dropOut) ->
             #available capacity is dropout weight plus margin in sack
@@ -114,11 +103,10 @@ greedyThenSwap = (problem, tries) ->
         
         swap = () ->
             # choose one item to swap out
-            dropOut = selectDropOut()
+            dropOut = sack.giveRandom()
             if dropOut
                 delta = packDelta(dropOut)
                 usedTries++
-                
                 #see if it got any better
                 improvement = delta.value-dropOut.value
                 if improvement > 0
@@ -135,7 +123,7 @@ greedyThenSwap = (problem, tries) ->
     else
         console.log "Won't improve an empty sack"
     if successes
-        console.log "Improved from "+greedyValue+" to "+sack.value+" with "+successes+" successful swaps on "+usedTries+" tries."
+        console.log "Improved from "+greedyValue+" to "+sack.value()+" with "+successes+" successful swaps on "+usedTries+" tries."
     else
         console.log "No improvement with "+usedTries+" tries."
     sack
