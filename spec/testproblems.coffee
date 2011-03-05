@@ -1,5 +1,7 @@
 fs = require 'fs'
 
+exports.i1 = {"id":"1","weight":[1,1,1],"value":10}
+
 exports.e0 = {
         "name":"lol",
         "timeout":6000,
