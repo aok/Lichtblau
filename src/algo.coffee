@@ -13,7 +13,7 @@ class Sack
         if not _.include(@contents, item.id) and fits item.weight, @capacity
             @capacity = subtract @capacity, item.weight
             @value += item.value
-            @contents.push(item.id)
+            @contents.push(item)
             true
         else
             false
@@ -23,9 +23,14 @@ class Sack
             _.map(_.zip(a,b), (tuple) -> tuple[0]+tuple[1])
 
         if item?
-            @contents = _.without @contents
-            @capacity = add @capacity, item.weight
-            @value -= item.value
+            newConts =  _.without @contents,item
+            
+            if newConts.length < @contents
+                @contents = newConts
+                @capacity = add @capacity, item.weight
+                @value -= item.value
+            else
+                console.log "can't drop something that is not in the sack"
         else
             console.log "can't drop empty item"
 
@@ -54,23 +59,12 @@ packInOrderOfValuePerSumWeight = (problem) ->
 valuePerSumWeight = (item) ->
     item.bang = item.value / _.reduce(item.weight, ((memo, num) -> memo + num), 0)
 
-randomTriesFromBestFraction = (problem, fraction=10, tries=1000) ->
+
+greedyThenSwap = (problem, tries) ->
     items = sortWith problem.contents, valuePerSumWeight
-    items = items[0...items.length/fraction]
-
-    sacks = []
-
-    newRandomSack = () ->
-        items = _.sortBy(items, Math.random)
-        sacks.push packFromPrioritisedList items, problem.capacity
-
-    newRandomSack() for i in [0..tries]
-
-    _.max(sacks, (sack) -> sack.value)
-
-greedyThenSwap = (problem, tries=1000) ->
-    sack = packInOrderOfValuePerSumWeight(problem)
+    sack = packFromPrioritisedList items, problem.capacity
     greedyValue = sack.value
+    
     if sack?.contents?.length > 0
         items = sortWith problem.contents,valuePerSumWeight
         
@@ -83,12 +77,14 @@ greedyThenSwap = (problem, tries=1000) ->
         selectDropOut = () ->
             if cursor == 0
                 cursor = sack?.contents?.length
-                
-            items[sack.contents[--cursor]]
+
+            dropOut = sack.contents[--cursor]
         
         packDelta = (dropOut) ->
+            #available capacity is dropout weight plus margin in sack
+            available = _.map(_.zip(dropOut.weight,sack.capacity), (tuple) -> tuple[0]+tuple[1])
             # create a tiny sack to model the remaining capacity
-            delta = new Sack _.map(_.zip(dropOut.weight,sack.capacity), (tuple) -> tuple[0]+tuple[1])
+            delta = new Sack available
             ## consider refill from dropOut's position onward
             candidates = items[dropOut.id..items.length]
             ## try packing delta
@@ -106,26 +102,20 @@ greedyThenSwap = (problem, tries=1000) ->
                 #see if it got any better
                 improvement = delta.value-dropOut.value
                 if improvement > 0
+                    console.log improvement
+                    #it did!
                     successes++
+                    #execute swap, drop first
                     sack.drop dropOut
-                    toPack = _.map(delta.contents, (id) -> items[id-1])
-                    _.each(toPack, (item) -> sack.pack item)
+                    #pack in delta
+                    _.each(delta.contents, (item) -> sack.pack item)
 
         swap() for i in [1..tries]
     else
-        console.log "Can't improve on empty sack"
+        console.log "Won't improve an empty sack"
     console.log "Improved from "+greedyValue+" to "+sack.value+" with "+successes+" successful swaps on "+usedTries+" tries."
     sack
 
-tryManyAndChooseBest = (problem) ->
-    solutions = [
-        randomTriesFromBestFraction(problem),
-        greedyThenSwap(problem)
-    ]
-
-    values = _.pluck(solutions, "value")
-    best = _.max(solutions, (sack) -> sack.value)
-    console.log "Got values "+values+" - algo "+solutions.indexOf(best)+" wins"
-    best.contents
-
-exports.bestSoFar = tryManyAndChooseBest
+exports.bestSoFar = (problem) ->
+    sack = greedyThenSwap(problem,problem.timeout/500)
+    ids = _.pluck(sack.contents, "id")

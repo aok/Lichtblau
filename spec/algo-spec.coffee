@@ -20,22 +20,8 @@ runChallenges = () ->
 
     solutions
 
-loops = (max, timeout) ->
-    i = 0
-    dl = (new Date).getTime()+timeout
-    i++ while i < max and (new Date).getTime() < dl
-    i
-
 vows.describe('Lichtblau').addBatch(
-    'Clock-based timeout with inrement loop':
-        'returns upper limit when limit is low and timeout long':
-            topic: loops(1000,10)
-            'Returns 1000': (t) ->
-                assert.equal(t,1000)
-        'returns under limit when limit is hihg and timeout short':
-            topic: loops(99999999999,3000)
-            'Returns less than max ': (t) ->
-                assert.isTrue(t<99999999999) 
+
     'Knapsack rules, when nothing fits':
         topic: whattotest testproblems.e0
         'Returns an array': (t) ->
@@ -55,7 +41,7 @@ vows.describe('Lichtblau').addBatch(
         'Returns [3]': (t) ->
             assert.deepEqual(t, ['3'])
 
-    'Knapsack rules, for round4 challenge 6':
+    'Knapsack rules, for round 4 challenge 6':
         topic: whattotest testproblems.challenge(4,6)
         'Returns an array': (t) ->
             assert.isArray(t)
@@ -65,9 +51,9 @@ vows.describe('Lichtblau').addBatch(
             uniq = _.uniq(t)
             assert.equal(uniq?.length,t?.length)
 
-    'Basic validation for all example rounds':
-        topic: runChallenges()
-        'Returns an array of arrays': (t) ->
-            for a in t
-                assert.isArray(a)
+#    'Basic validation for all example rounds':
+#        topic: runChallenges()
+#        'Returns an array of arrays': (t) ->
+#            for a in t
+#                assert.isArray(a)
 ).export(module)
