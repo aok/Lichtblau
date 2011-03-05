@@ -75,7 +75,7 @@ greedyThenSwap = (problem, tries) ->
         cursor = 0
 
         selectDropOut = () ->
-            if cursor == 0
+            if cursor == 1
                 cursor = sack?.contents?.length
 
             dropOut = sack.contents[--cursor]
@@ -113,9 +113,12 @@ greedyThenSwap = (problem, tries) ->
         swap() for i in [1..tries]
     else
         console.log "Won't improve an empty sack"
-    console.log "Improved from "+greedyValue+" to "+sack.value+" with "+successes+" successful swaps on "+usedTries+" tries."
+    if successes
+        console.log "Improved from "+greedyValue+" to "+sack.value+" with "+successes+" successful swaps on"+usedTries+" tries."
+    else
+        console.log "No improvement with "+usedTries+" tries."
     sack
 
 exports.bestSoFar = (problem) ->
-    sack = greedyThenSwap(problem,problem.timeout/500)
+    sack = greedyThenSwap(problem,problem.timeout/10)
     ids = _.pluck(sack.contents, "id")
