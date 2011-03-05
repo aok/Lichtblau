@@ -34,7 +34,7 @@ class Sack
                 @value -= item.value
                 true
             else
-                console.log "can't drop "+item.id+", it is not in the sack")
+                console.log "can't drop "+item.id+", it is not in the sack"
                 false
         else
             console.log "can't drop empty item"
@@ -141,5 +141,5 @@ greedyThenSwap = (problem, tries) ->
     sack
 
 exports.bestSoFar = (problem) ->
-    sack = greedyThenSwap(problem,problem.timeout/100)
+    sack = greedyThenSwap(problem,problem.timeout/50)
     ids = _.pluck(sack.contents, "id")
