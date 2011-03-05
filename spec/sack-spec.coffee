@@ -6,7 +6,6 @@ sack = require '../src/sack'
 testproblems = require './testproblems'
 
 vows.describe('Sacks').addBatch(
-
     'New empty [1,1,1] sack':
         topic: new sack.Sack [1,1,1]
         'is an object': (t) ->
