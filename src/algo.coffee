@@ -67,17 +67,22 @@ randomTriesFromBestFraction = (problem, fraction=10, tries=1000) ->
 
     _.max(sacks, (sack) -> sack.value)
 
-greedyThenSwap = (problem, tries=100) ->
+greedyThenSwap = (problem, tries=1000) ->
     sack = packInOrderOfValuePerSumWeight(problem)
     if sack?.contents?.length > 0
         items = sortWith problem.contents,valuePerSumWeight
         
+        successes = 0
+        usedTries = 0
+        
         #selecting things to remove reverses through items added by greedy
-        cursor = sack?.contents?.length
+        cursor = 0
 
         selectDropOut = () ->
-            if cursor > 0
-                items[sack.contents[--cursor]]
+            if cursor == 0
+                cursor = sack?.contents?.length
+                
+            items[sack.contents[--cursor]]
         
         packDelta = (dropOut) ->
             # create a tiny sack to model the remaining capacity
@@ -89,6 +94,9 @@ greedyThenSwap = (problem, tries=100) ->
             delta
         
         swap = () ->
+            #stats
+            usedTries++
+
             # choose one item to swap out
             dropOut = selectDropOut()
             if dropOut?
@@ -96,15 +104,15 @@ greedyThenSwap = (problem, tries=100) ->
                 #see if it got any better
                 improvement = delta.value-dropOut.value
                 if improvement > 0
-                    oldVal = sack.value
+                    successes++
                     sack.drop dropOut
                     toPack = _.map(delta.contents, (id) -> items[id-1])
                     _.each(toPack, (item) -> sack.pack item)
-                    newVal = sack.value
 
         swap() for i in [1..tries]
     else
         console.log "Can't improve on empty sack"
+    console.log "Improved "+successes+" times on "+usedTries+" tries."
     sack
 
 tryManyAndChooseBest = (problem) ->
