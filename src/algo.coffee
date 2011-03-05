@@ -7,10 +7,13 @@ class Sack
         subtract = (a, b) ->
             _.map(_.zip(a,b), (tuple) -> tuple[0]-tuple[1])
 
+        contains = (item) ->
+            _.include(@contents, item)
+
         fits = (a, b) ->
             _.all(_.map(_.zip(a, b), (t) -> t[0] <= t[1]))
 
-        if not _.include(@contents, item) and fits item.weight, @capacity
+        if (not contains item) and (fits item.weight, @capacity)
             @capacity = subtract @capacity, item.weight
             @value += item.value
             @contents.push(item)
