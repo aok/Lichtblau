@@ -43,7 +43,7 @@ exports.challenge = (round, challenge) ->
 rounds = []
 getRound = (idx) ->
     if not rounds[idx]
-        path = fs.realpathSync('spec/round'+idx+'-data.json')
+        path = fs.realpathSync('spec/data/round'+idx+'-data.json')
         rounds[idx] = JSON.parse(fs.readFileSync path)
     rounds[idx]
     
