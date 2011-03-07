@@ -11,12 +11,15 @@ It is built with CoffeeScript, Node.js, Express and Vows.
     npm install node-dev coffee-script express vows
     npm install connect@0.5.10
 
-## Running
+## Developing
 
     cake watch
-    cake server
     cake test
+
+## Running
+
+    cake server
 
 ## Testing with curl
 
-    curl -H "Content-Type: application/json" -d @spec/round0-challenge0-data.json  http://localhost:8000
+    curl -H "Content-Type: application/json" -d @spec/data/round4-challenge6-data.json  http://localhost:8000
