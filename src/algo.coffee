@@ -1,26 +1,25 @@
 _ = require 'underscore'
-sack = require './sack'
-
-sortWith = (items, bangf) ->
-    _.sortBy(_.map(items, bangf), (item) -> -1*item.bang)
-
-packNewSack = (items,capacity) ->
-    sack = new sack.Sack capacity
-    _.each(items, (item) -> (sack capacity).pack item)
-    sack
+sacks = require './sack'
 
 # ### valuePerSumWeight(item)
 # 
 # Sums up all weight dimensions and divides value by it.
 # Works when all weight dimensions are uniformly distributed in the same number space.
 # Some normalisation would help for heterogeneous ranges, different distributions would be still harder.
-valuePerSumWeight = (item) ->
-    item.bang = item.value / _.reduce(item.weight, ((memo, num) -> memo + num), 0)
+exports.valuePerSumWeight = (item) ->
+    sumOfWeights = _.reduce(item.weight, ((memo, num) -> memo + num), 0)
+    item.bang = item.value / sumOfWeights
+    item
+
+sortWith = (items, bangf) ->
+    _.sortBy(_.map(items, bangf), (item) -> -1*item.bang)
+
 
 
 greedyThenSwap = (problem, tries) ->
-    items = sortWith problem.contents, valuePerSumWeight
-    sack = packNewSack items, problem.capacity
+    sack = new sacks.Sack problem.capacity
+    items = sortWith problem.contents, exports.valuePerSumWeight
+    sack.packList items
     return sack if sack.isEmpty()
     greedyValue = sack.value()
     
@@ -33,10 +32,13 @@ greedyThenSwap = (problem, tries) ->
         #available capacity is dropout weight plus margin in sack
         available = _.map(_.zip(dropOut.weight,sack.capacity), (tuple) -> tuple[0]+tuple[1])
         # create a tiny sack to model the remaining capacity
-        packNewSack(selectCandidates(dropOut),available)
+        sack = new sacks.Sack available
+        sack.packList selectCandidates
+        sack
     
     swap = () ->
-        delta = packDelta sack.giveRandom()
+        dropOut = sack.giveRandom()
+        delta = packDelta
         if delta.value > dropOut.value
             successes++
             sack.packList(delta.contents)
@@ -46,7 +48,7 @@ greedyThenSwap = (problem, tries) ->
     if successes
         console.log "Improved from "+greedyValue+" to "+sack.value()+" with "+successes+" successful swaps on "+tries+" tries."
     else
-        console.log "No improvement with "+usedTries+" tries."
+        console.log "No improvement with "+tries+" tries."
     sack
 
 exports.bestSoFar = (problem) ->

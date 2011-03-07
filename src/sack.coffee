@@ -1,7 +1,7 @@
 _ = require 'underscore'
 
 class Sack
-    constructor: (@capacity, @contents = [], @available = [], @cursor = 0) ->
+    constructor: (@capacity, @contents = [], @cursor = 0) ->
 
     isEmpty: () ->
         @contents.length < 1
@@ -39,7 +39,8 @@ class Sack
             false
 
     packList: (items) ->
-        _.all(_.map(items, (item) -> this.pack item))
+        sack = this
+        _.all(_.map(items, (item) -> sack.pack item))
 
     drop: (item) ->
         add = (a, b) ->
@@ -58,5 +59,6 @@ class Sack
         else
             console.log "can't drop empty item"
             false
+
 
 exports.Sack = Sack

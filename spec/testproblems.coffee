@@ -1,8 +1,8 @@
 fs = require 'fs'
 
-exports.i1 = {"id":"1","weight":[1,1,1],"value":10}
-exports.i2 = {"id":"2","weight":[1,1,1],"value":10}
-exports.i3 = {"id":"3","weight":[1,1,1],"value":10}
+exports.i1 = {"id":"1","weight":[1,1,1],"value":9}
+exports.i2 = {"id":"2","weight":[1,1,1],"value":9}
+exports.i3 = {"id":"3","weight":[1,1,1],"value":9}
 
 exports.e0 = {
         "name":"lol",
