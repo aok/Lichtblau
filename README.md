@@ -9,7 +9,6 @@ It is built with CoffeeScript, Node.js, Express and Vows.
     brew install node
     curl http://npmjs.org/install.sh | sh
     npm install node-dev coffee-script express vows
-    npm install connect@0.5.10
 
 ## Developing
 
